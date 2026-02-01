@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dan AI - Prompt Engineering Course</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .glass-dark {
+      background: rgba(102, 126, 234, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(270deg, #667eea, #764ba2, #f093fb);
+      background-size: 600% 600%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    }
+    
+    .progress-glow {
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+    }
+    
+    .btn-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .card-shine {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-shine::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+    
+    .module-active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body class="text-gray-900 min-h-screen">
+  <!-- Header -->
+  <header class="glass-effect shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg floating">
+            <span class="text-white text-2xl font-bold">D</span>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold gradient-text">Dan AI</h1>
+            <p class="text-sm text-gray-600 font-medium">Prompt Engineering Mastery</p>
+          </div>
+        </div>
+        <button id="connectWalletBtn" class="px-6 py-3 btn-gradient text-white rounded-xl font-semibold text-sm shadow-lg">
+          Connect Wallet
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Welcome Section -->
+    <section id="welcomeSection" class="mb-8">
+      <div class="glass-effect rounded-2xl shadow-2xl p-10 card-shine hover-lift">
+        <div class="text-center mb-8">
+          <h2 class="text-5xl font-bold gradient-text mb-4">Welcome to Dan AI</h2>
+          <p class="text-gray-700 text-lg max-w-3xl mx-auto">Master the art of crafting effective AI prompts from beginner to professional level. Earn an on-chain NFT certificate upon completion.</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 mb-10">
+          <div class="p-8 glass-dark rounded-2xl hover-lift border border-purple-200">
+            <div class="text-5xl mb-4 text-center">📚</div>
+            <h3 class="font-bold text-lg mb-2 text-center gradient-text">12 Modules</h3>
+            <p class="text-sm text-gray-700 text-center">Comprehensive curriculum from basics to advanced</p>
+          </div>
+          <div class="p-8 glass-dark rounded-2xl hover-lift border border-purple-200">
+            <div class="text-5xl mb-4 text-center">🎯</div>
+            <h3 class="font-bold text-lg mb-2 text-center gradient-text">Practice Exercises</h3>
+            <p class="text-sm text-gray-700 text-center">Hands-on challenges to test your skills</p>
+          </div>
+          <div class="p-8 glass-dark rounded-2xl hover-lift border border-purple-200">
+            <div class="text-5xl mb-4 text-center">🏆</div>
+            <h3 class="font-bold text-lg mb-2 text-center gradient-text">NFT Certificate</h3>
+            <p class="text-sm text-gray-700 text-center">Blockchain-verified achievement</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button id="startCourseBtn" class="px-10 py-4 btn-gradient text-white rounded-xl font-bold text-lg shadow-2xl">
+            Start Learning Journey
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Progress -->
+    <section id="progressSection" class="mb-8 hidden">
+      <div class="glass-effect rounded-2xl shadow-xl p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold gradient-text">Your Progress</h3>
+          <span id="progressText" class="text-sm font-semibold text-gray-700">0% Complete</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+          <div id="progressBar" class="animated-gradient h-4 rounded-full transition-all duration-500 progress-glow" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Content -->
+    <div class="grid lg:grid-cols-4 gap-6">
+      <!-- Sidebar - Module List -->
+      <aside class="lg:col-span-1">
+        <div class="glass-effect rounded-2xl shadow-xl p-5 sticky top-24">
+          <h3 class="font-bold mb-5 text-lg gradient-text">Course Modules</h3>
+          <div id="moduleList" class="space-y-2"></div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="lg:col-span-3">
+        <!-- Lesson Content -->
+        <div id="lessonContent" class="glass-effect rounded-2xl shadow-xl p-10 mb-6 hidden">
+          <div class="mb-8">
+            <span id="lessonLevel" class="inline-block px-4 py-2 glass-dark text-purple-700 text-xs font-bold rounded-full mb-3 border border-purple-300"></span>
+            <h2 id="lessonTitle" class="text-4xl font-bold mb-3 gradient-text"></h2>
+            <p id="lessonDescription" class="text-gray-700 text-lg"></p>
+          </div>
+          
+          <div id="lessonBody" class="prose prose-lg max-w-none mb-8"></div>
+
+          <!-- Exercise Section -->
+          <div id="exerciseSection" class="mt-8 p-8 glass-dark rounded-2xl border border-purple-200 hidden">
+            <h4 class="font-bold mb-4 text-xl gradient-text">Practice Exercise</h4>
+            <p id="exercisePrompt" class="mb-5 text-gray-800 font-medium"></p>
+            <textarea id="exerciseAnswer" class="w-full p-4 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent glass-effect" rows="5" placeholder="Type your prompt here..."></textarea>
+            <button id="submitExerciseBtn" class="mt-4 px-6 py-3 btn-gradient text-white rounded-xl font-semibold shadow-lg">
+              Submit Answer
+            </button>
+            <div id="exerciseFeedback" class="mt-4 hidden"></div>
+          </div>
+
+          <!-- Navigation -->
+          <div class="flex justify-between mt-10 pt-8 border-t-2 border-gray-200">
+            <button id="prevLessonBtn" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
+              ← Previous
+            </button>
+            <button id="nextLessonBtn" class="px-6 py-3 btn-gradient text-white rounded-xl font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Certificate Section -->
+        <div id="certificateSection" class="glass-effect rounded-2xl shadow-2xl p-10 hidden">
+          <div class="text-center mb-10">
+            <div class="text-8xl mb-6 floating">🎓</div>
+            <h2 class="text-5xl font-bold mb-4 gradient-text">Congratulations!</h2>
+            <p class="text-gray-700 text-lg mb-6 max-w-2xl mx-auto">You've completed the Dan AI Prompt Engineering course. Mint your NFT certificate to verify your achievement on the blockchain.</p>
+          </div>
+
+          <div class="max-w-md mx-auto animated-gradient p-8 rounded-2xl mb-8 shadow-2xl card-shine">
+            <div class="glass-effect rounded-xl p-8">
+              <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold gradient-text mb-2">Dan AI Certificate</h3>
+                <p class="text-sm text-gray-700 font-semibold">Blockchain-Verified Achievement</p>
+              </div>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center p-3 glass-dark rounded-lg">
+                  <span class="text-gray-700 font-medium">Course:</span>
+                  <span class="font-bold text-gray-900">Prompt Engineering</span>
+                </div>
+                <div class="flex justify-between items-center p-3 glass-dark rounded-lg">
+                  <span class="text-gray-700 font-medium">Completion:</span>
+                  <span class="font-bold text-gray-900" id="completionDate"></span>
+                </div>
+                <div class="flex justify-between items-center p-3 glass-dark rounded-lg">
+                  <span class="text-gray-700 font-medium">Minting Fee:</span>
+                  <span class="font-bold text-purple-700">50 $NODE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <p id="walletStatus" class="text-sm text-gray-700 mb-6 font-medium"></p>
+            <button id="mintCertificateBtn" class="px-10 py-4 btn-gradient text-white rounded-xl font-bold text-lg shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed">
+              Mint Certificate (50 $NODE)
+            </button>
+            <div id="mintStatus" class="mt-6 hidden"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass-effect mt-16 border-t-2 border-purple-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <p class="text-center text-gray-700 text-sm font-medium">© 2026 Dan AI. Blockchain-verified certifications.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
